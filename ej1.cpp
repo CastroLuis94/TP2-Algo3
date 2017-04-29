@@ -9,13 +9,13 @@ using namespace std;
 
 
 int main(){
-    int cantProvincias;
-    cin << cantProvincias;
-    
+    int cantCiudades;
+    cin << cantCiudades;
+    // n es la candidad de ciudades
     
     int cantRutas;
     cint << cantRutas;
-    
+    //m la cantidad de rutas
     
     int origen;
     cin << origen;
@@ -28,4 +28,10 @@ int main(){
     int k;
     cin << k;
     //k siendo la maxima cantidad de rutas premium que puede haber 
+
+    int i = 0;
+    while(i < cantRutas){
+        
+        i++;
+    }
 }

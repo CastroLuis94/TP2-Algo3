@@ -3,6 +3,7 @@
 #include <vector>
 #include <stdio.h>
 #include <limits.h>
+#include <tuple>
 
 using namespace std;
 
@@ -127,6 +128,40 @@ vector<vector <Tupla> > matrizAdyacencia(int N, vector<vector< int > > vs){
     return res;
 }
 
+vector<tuple<int,int,Tupla> > listaDeIncidencia(vector<vector<int> > entrada){
+    int i = 0;
+    vector<tuple <int,int,Tupla> > res;
+    while(i < entrada.size()){
+        tuple<int,int,Tupla> t;
+        bool premium;
+        if(entrada[i][2]==1){
+            premium = true;
+        }else{
+            premium = false;
+        }
+        get<0>(t) = entrada[i][0];
+        get<1>(t) = entrada[i][1];
+        get<2>(t) = Tupla(entrada[i][3],premium);
+        res.push_back(t);
+        i++;
+    }
+    return res;
+}
+
+void mostrar(vector<tuple <int,int,Tupla> > ts){
+    int i = 0;
+    cout << "[";
+    while( i < ts.size()){
+        cout << "(" << (get<0>(ts[i])) << "," << (get<1>(ts[i])) << ",";
+        mostrar(get<2>(ts[i]));
+        cout << ")";
+        i++;
+        if(i < ts.size()){
+            cout << ",";
+        }
+    }
+    cout << "]"<<endl;
+}
 
 int minimoNoProcesado(int distancias[], bool S[], int N)
 {
@@ -215,8 +250,8 @@ int main(){
         otra, caso contrario tendria que hacer un par de cambios pero no creo que sean tan forros(mejor commit ever).
         */
         mostrar(matrizAdyacencia(cantCiudades,entrada));
-        vector<vector <Tupla> > matriz = matrizAdyacencia(cantCiudades,entrada);
-        cout << "Dio esto: " << Dijkstradirijido(origen, destino ,matriz,cantCiudades)<< endl;
+        mostrar(listaDeIncidencia(entrada));
+        //cout << "Dio esto: " << Dijkstradirijido(origen, destino ,matriz,cantCiudades)<< endl;
     }
   
     cout << "Fin de la ejecucion del algoritmo." << endl;

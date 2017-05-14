@@ -5,19 +5,16 @@
 using namespace std;
 
 struct Tupla{
-    bool hayCamino;
     int distancia;
     bool caminoPremium;
     Tupla(){
-        hayCamino = false;
         distancia = -1;
         caminoPremium = false;
     }
-   Tupla(bool hayC,int d,bool cP){
-        hayCamino = hayC;
+    Tupla(int d,bool cP){
         distancia = d;
         caminoPremium = cP;
-   }
+    }
 };
 
 vector<vector< int > > levantarEntrada(int cantRutas){
@@ -44,7 +41,7 @@ vector<vector< int > > levantarEntrada(int cantRutas){
 }
 
 void mostrar(Tupla t) {
-    cout << "(hC:" << t.hayCamino << ",d:" << t.distancia << ",p:" << t.caminoPremium << ")";  
+    cout << "(d:" << t.distancia << ",p:" << t.caminoPremium << ")";  
 }
     
 
@@ -95,8 +92,8 @@ vector<vector< Tupla > > matriz(int N, int M){
     return res;
 }
 
-vector<vector <Tupla> > matrizAdyacencia(int N, int M, vector<vector< int > > vs){
-    vector < vector <Tupla> > res = matriz(N,M);
+vector<vector <Tupla> > matrizAdyacencia(int N, vector<vector< int > > vs){
+    vector < vector <Tupla> > res = matriz(N,N);
     int i = 0;
     while(i < vs.size()){
         int ciudad1 = vs[i][0];
@@ -108,8 +105,8 @@ vector<vector <Tupla> > matrizAdyacencia(int N, int M, vector<vector< int > > vs
             hayCaminoPremium = false;
         }
         int distancia = vs[i][3];
-        res[ciudad1][ciudad2] = Tupla(true,distancia,hayCaminoPremium);
-        res[ciudad2][ciudad1] = Tupla(true,distancia,hayCaminoPremium);
+        res[ciudad1][ciudad2] = Tupla(distancia,hayCaminoPremium);
+        res[ciudad2][ciudad1] = Tupla(distancia,hayCaminoPremium);
         // Nota importante, estoy asumiendo que si hay camino de A a B entonces hay camino de B a A y tiene la misma distancia,
         //capaz estoy flasheando
         i++;
@@ -156,7 +153,7 @@ int main(){
         Cosa importante, estoy asumiendo que el -1 -1 son los primeros numeros al empezar una nueva entrada y no estan en el medio de
         otra, caso contrario tendria que hacer un par de cambios pero no creo que sean tan forros(mejor commit ever).
         */
-        mostrar(matrizAdyacencia(cantCiudades,cantRutas,entrada));
+        mostrar(matrizAdyacencia(cantCiudades,entrada));
     }
   
     cout << "Fin de la ejecucion del algoritmo." << endl;

@@ -51,6 +51,60 @@ vector<vector< int > > levantarEntrada(){
     return res;
 }
 
+
+vector<vector< int > > levantarEntrada2(int cantCiudades, int cantRutas){
+    vector< vector<int> > res;
+
+    cout << "¿Cual es la ciudad de origen?" <<endl;
+    int origen;
+    cin >> origen;
+    
+    cout << "¿Cual es la ciudad de destino?" <<endl;
+    int destino;
+    cin >> destino;
+    
+    cout << "¿Cual es la cantidad de rutas premium?" <<endl;
+    int k;
+    cin >> k;
+    //k siendo la maxima cantidad de rutas premium que puede haber 
+
+    cout << "Ingrese las m rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
+    int i = 0;
+    while(i < cantRutas){
+        vector<int> camino;
+        int ciudad1;
+        cin >> ciudad1;
+        int ciudad2;
+        cin >> ciudad2;
+        int premium;
+        cin >> premium;
+        int distancia;
+        cin >> distancia;
+        camino.push_back(ciudad1);
+        camino.push_back(ciudad2);
+        camino.push_back(premium);
+        camino.push_back(distancia);
+        res.push_back(camino);
+        i++;
+    }
+    return res;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void mostrar(vector<int> vs){
     cout << "[";
     int i = 0;
@@ -76,7 +130,15 @@ void mostrar(vector<vector<int> > vs){
     }
     cout << "]"<<endl;
 }
-int main(){
+int main(){    
     mostrar(levantarEntrada());
+    int fin1;
+    int fin2;
+    cin >> fin1;
+    cin >> fin2;
+    while((fin1 != -1) and (fin2!= -1)){
+        mostrar(levantarEntrada2(fin1, fin2));
+    }
+    
     return 0;
 }

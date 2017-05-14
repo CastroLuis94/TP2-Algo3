@@ -1,6 +1,8 @@
 #include <iostream>
 #include <ostream>
 #include <vector>
+#include <stdio.h>
+#include <limits.h>
 
 using namespace std;
 
@@ -42,6 +44,14 @@ vector<vector< int > > levantarEntrada(int cantRutas){
 
 void mostrar(Tupla t) {
     cout << "(d:" << t.distancia << ",p:" << t.caminoPremium << ")";  
+}
+
+int d(Tupla t) {
+    return t.distancia;  
+}
+
+bool premium(Tupla t) {
+    return t.caminoPremium;  
 }
     
 
@@ -106,14 +116,65 @@ vector<vector <Tupla> > matrizAdyacencia(int N, vector<vector< int > > vs){
         }
         int distancia = vs[i][3];
         res[ciudad1][ciudad2] = Tupla(distancia,hayCaminoPremium);
-        res[ciudad2][ciudad1] = Tupla(distancia,hayCaminoPremium);
+        res[ciudad2][ciudad1] = Tupla(distancia,hayCaminoPremium);        
         // Nota importante, estoy asumiendo que si hay camino de A a B entonces hay camino de B a A y tiene la misma distancia,
         //capaz estoy flasheando
         i++;
     }
+    for(int n = 1; n < N+1; n++){
+        res[n][n] = Tupla(0, false);
+    }
     return res;
 }
 
+
+int minimoNoProcesado(int distancias[], bool S[], int N)
+{
+   //habia un min_index
+   int min = INT_MAX;
+   int indice;
+   for (int n = 1; n < N+1; n++){
+        if (S[n] == false && distancias[n] <= min){
+            min = distancias[n], indice = n;
+        }
+    }
+  
+   return indice;
+}
+
+
+
+
+
+
+
+
+
+int Dijkstradirijido(int origen, int destino, vector<vector <Tupla> > &matriz, int N){
+    int distancias[N];
+    bool S[N];
+     for (int i = 0; i < N; i++){
+        distancias[i] = INT_MAX;
+        S[i] = false;
+    }  
+     distancias[origen] = 0;
+     for (int nodos = 0; nodos < N; nodos++)//decia N-1
+     {
+
+       int u = minimoNoProcesado(distancias, S, N);
+  
+       S[u] = true;
+  
+     
+       for (int n = 0; n < N; N++){  
+            if (!S[n] && (d(matriz[u][n+1]) > -1) && (distancias[u]!= INT_MAX) && distancias[u]+d(matriz[u][n+1]) < distancias[n]){
+             distancias[n] = distancias[u] + d(matriz[u][n+1]);
+            }
+        }
+    }
+return distancias[destino];
+
+}
 
 int main(){
     while(true){
@@ -154,8 +215,12 @@ int main(){
         otra, caso contrario tendria que hacer un par de cambios pero no creo que sean tan forros(mejor commit ever).
         */
         mostrar(matrizAdyacencia(cantCiudades,entrada));
+        vector<vector <Tupla> > matriz = matrizAdyacencia(cantCiudades,entrada);
+        cout << "Dio esto: " << Dijkstradirijido(origen, destino ,matriz,cantCiudades)<< endl;
     }
   
     cout << "Fin de la ejecucion del algoritmo." << endl;
     return 0;
 }
+
+

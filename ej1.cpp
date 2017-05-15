@@ -3,164 +3,130 @@
 #include <vector>
 #include <stdio.h>
 #include <limits.h>
-#include <tuple>
+#include "representador.h"
+
 
 using namespace std;
 
-struct Tupla{
-    int distancia;
-    bool caminoPremium;
-    Tupla(){
-        distancia = -1;
-        caminoPremium = false;
+bool noSeteados(bool S[], int N){
+    bool b= true;
+    for(int i =1; i<N+1; i++){
+        if(S[i] == false){
+            return true;
+        }
     }
-    Tupla(int d,bool cP){
-        distancia = d;
-        caminoPremium = cP;
+    return false;
+
+}
+
+int minimoNoProcesado(vector <vector<int> > pre, bool S[], int N, int contador[])
+{
+   //habia un min_index
+   int min = INT_MAX;
+   int indice;
+   for (int n = 1; n < N+1; n++){
+        if (S[n] == false && pre[contador[n]][n] <= min){
+            min = pre[contador[n]][n], indice = n;
+        }
     }
-};
+  
+   return indice;
+}
 
-vector<vector< int > > levantarEntrada(int cantRutas){
-    int i = 0;
-    vector<vector< int > > res;
-    while(i < cantRutas){
-        vector<int> camino;
-        int ciudad1;
-        cin >> ciudad1;
-        int ciudad2;
-        cin >> ciudad2;
-        int premium;
-        cin >> premium;
-        int distancia;
-        cin >> distancia;
-        camino.push_back(ciudad1);
-        camino.push_back(ciudad2);
-        camino.push_back(premium);
-        camino.push_back(distancia);
-        res.push_back(camino);
-        i++;
+int minimoNoProcesadosP(int distancias[], bool S[], int N)
+{
+   //habia un min_index
+   int min = INT_MAX;
+   int indice;
+   for (int n = 1; n < N+1; n++){
+        if (S[n] == false && distancias[n] <= min){
+            min = distancias[n], indice = n;
+        }
     }
-    return res;
+  
+   return indice;
 }
 
-void mostrar(Tupla t) {
-    cout << "(d:" << t.distancia << ",p:" << t.caminoPremium << ")";  
-}
 
-int d(Tupla t) {
-    return t.distancia;  
-}
 
-bool premium(Tupla t) {
-    return t.caminoPremium;  
-}
+int Dijkstradirijido(int origen, int destino, vector<vector <Dato> > matriz, int N, int k){
+    //int distancias[N+1];
+    vector<int> distancias(N+1, INT_MAX);
+    vector< vector< int > > pre( k+1, distancias);
+    int contador[N+1];
+    bool S[N+1];
+     for (int i = 1; i < N+1; i++){
+      //  distancias[i] = INT_MAX;
+        S[i] = false;
+        contador[i] = 0;
+    }  
     
-
-void mostrar(vector<Tupla> vs){
-    cout << "[";
-    int i = 0;
-    while(i < vs.size()){
-        mostrar(vs[i]);
-        i++;
-        if(i < vs.size()){
-            cout << ",";
+     pre[contador[origen]][origen] = 0;
+     
+     while(noSeteados(S, N))//decia N-1
+     {
+        
+       int u = minimoNoProcesado(pre, S, N, contador);
+       //cout << u << endl;
+  
+       S[u] = true;
+        
+       
+       for (int n = 1; n < N+1; n++){  
+            if ((!S[n]) && (d(matriz[u][n]) > -1)  && (pre[contador[u]][u]+d(matriz[u][n]) <= pre[contador[n]][n]) && (contador[u] <= k) ){
+                if(premium(matriz[u][n]) and (contador[u] < k) and (k>0) ){
+                    contador[n] = contador[u] + 1;
+                }else{
+                    contador[n] = contador[u];
+                }
+                if((contador[u] < k) or ((contador[u] == k)and (!premium(matriz[u][n])))){                            
+                    pre[contador[n]][n] = pre[contador[u]][u] + d(matriz[u][n]);
+                }
+                if((contador[u] == k) and (premium(matriz[u][n])) and (k>0)){
+                    contador[u]--;
+                }
+            }            
         }
-    }
-    cout << "]" <<endl;
+    }   
+
+return pre[contador[destino]][destino];
 }
 
-void mostrar(vector<vector<Tupla> > vs){
-    cout << "[";
-    int i = 0;
-    while(i < vs.size()){
-        mostrar(vs[i]);
-        i++;
-        if(i < vs.size()){
-            cout << ",";
+int Dijkstradirijidossinpremium(int origen, int destino, vector<vector <Dato> > matriz, int N, int k){
+    int distancias[N+1];  
+    int contador[N+1];
+    bool S[N+1];
+     for (int i = 1; i < N+1; i++){
+        distancias[i] = INT_MAX;
+        S[i] = false;
+        contador[i] = 0;
+    }  
+
+     distancias[origen] = 0;
+     
+     while(noSeteados(S, N))//decia N-1
+     {
+
+       int u = minimoNoProcesadosP(distancias, S, N);      
+  
+       S[u] = true;
+        
+        
+       for (int n = 1; n < N+1; n++){  
+            if ((!S[n]) && (d(matriz[u][n]) > -1)  && (distancias[u]+d(matriz[u][n]) <= distancias[n]) && (contador[u] <= k) ){
+                 if((contador[u] < k) or ((contador[u] == k)and (!premium(matriz[u][n])))){                            
+                distancias[n] = distancias[u] + d(matriz[u][n]);
+                }
+                if(premium(matriz[u][n])){
+                    contador[n]= contador[u] + 1;
+                }else{
+                    contador[n] = contador[u];
+                }
+            }            
         }
-    }
-    cout << "]"<<endl;
-}
+    }   
+return distancias[destino];
 
-vector<Tupla> crearFila(int M){
-    int i = 0;
-    vector<Tupla> res;
-    while(i < M){
-        res.push_back(Tupla());
-        i++;
-    }
-    return res;
-}
-
-vector<vector< Tupla > > matriz(int N, int M){
-    int i = 0;
-    vector<vector<Tupla> > res;
-    vector<Tupla> fila = crearFila(M+1);
-    while(i <= N){
-        res.push_back(fila);
-        i++;
-    }
-    return res;
-}
-
-vector<vector <Tupla> > matrizAdyacencia(int N, vector<vector< int > > vs){
-    vector < vector <Tupla> > res = matriz(N,N);
-    int i = 0;
-    while(i < vs.size()){
-        int ciudad1 = vs[i][0];
-        int ciudad2 = vs[i][1];
-        bool hayCaminoPremium;
-        if (vs[i][2]==1){
-            hayCaminoPremium = true;
-        }else{
-            hayCaminoPremium = false;
-        }
-        int distancia = vs[i][3];
-        res[ciudad1][ciudad2] = Tupla(distancia,hayCaminoPremium);
-        res[ciudad2][ciudad1] = Tupla(distancia,hayCaminoPremium);        
-        // Nota importante, estoy asumiendo que si hay camino de A a B entonces hay camino de B a A y tiene la misma distancia,
-        //capaz estoy flasheando
-        i++;
-    }
-    for(int n = 1; n < N+1; n++){
-        res[n][n] = Tupla(0, false);
-    }
-    return res;
-}
-
-vector<tuple<int,int,Tupla> > listaDeIncidencia(vector<vector<int> > entrada){
-    int i = 0;
-    vector<tuple <int,int,Tupla> > res;
-    while(i < entrada.size()){
-        tuple<int,int,Tupla> t;
-        bool premium;
-        if(entrada[i][2]==1){
-            premium = true;
-        }else{
-            premium = false;
-        }
-        get<0>(t) = entrada[i][0];
-        get<1>(t) = entrada[i][1];
-        get<2>(t) = Tupla(entrada[i][3],premium);
-        res.push_back(t);
-        i++;
-    }
-    return res;
-}
-
-void mostrar(vector<tuple <int,int,Tupla> > ts){
-    int i = 0;
-    cout << "[";
-    while( i < ts.size()){
-        cout << "(" << (get<0>(ts[i])) << "," << (get<1>(ts[i])) << ",";
-        mostrar(get<2>(ts[i]));
-        cout << ")";
-        i++;
-        if(i < ts.size()){
-            cout << ",";
-        }
-    }
-    cout << "]"<<endl;
 }
 
 int minimoNoProcesado(int distancias[], bool S[], int N)
@@ -178,14 +144,7 @@ int minimoNoProcesado(int distancias[], bool S[], int N)
 }
 
 
-
-
-
-
-
-
-
-int Dijkstradirijido(int origen, int destino, vector<vector <Tupla> > &matriz, int N){
+int Dijkstradirijido(int origen, int destino, vector<vector <Dato> > &matriz, int N){
     int distancias[N];
     bool S[N];
      for (int i = 0; i < N; i++){
@@ -249,8 +208,12 @@ int main(){
         Cosa importante, estoy asumiendo que el -1 -1 son los primeros numeros al empezar una nueva entrada y no estan en el medio de
         otra, caso contrario tendria que hacer un par de cambios pero no creo que sean tan forros(mejor commit ever).
         */
-        mostrar(matrizAdyacencia(cantCiudades,entrada));
-        mostrar(listaDeIncidencia(entrada));
+        Representador rep(cantCiudades,entrada);
+        mostrar(rep.matrizAdyacencia());
+        mostrar(rep.listaDeIncidencia());
+        mostrar(rep.listaDeAdyacencia());
+        vector<vector <Dato> > matriz = rep.matrizAdyacencia();
+        cout << "Dio esto: " << Dijkstradirijido(origen, destino ,matriz,cantCiudades, k)<< endl;
         //cout << "Dio esto: " << Dijkstradirijido(origen, destino ,matriz,cantCiudades)<< endl;
     }
   

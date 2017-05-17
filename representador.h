@@ -50,6 +50,31 @@ void mostrar(vector<vector<Dato> > vs){
     }
     cout << "]"<<endl;
 }
+void mostrar(vector<int> vs){
+    cout << "[";
+    int i = 0;
+    while(i < vs.size()){
+        cout << vs[i];
+        i++;
+        if(i < vs.size()){
+            cout << ",";
+        }
+    }
+    cout << "]" <<endl;
+}
+void mostrar(vector<vector<int> > vs){
+    cout << "[";
+    int i = 0;
+    while(i < vs.size()){
+        mostrar(vs[i]);
+        i++;
+        if(i < vs.size()){
+            cout << ",";
+        }
+    }
+    cout << "]"<<endl;
+}
+
 
 
 void mostrar(vector<tuple <int,int,Dato> > ts){
@@ -67,7 +92,50 @@ void mostrar(vector<tuple <int,int,Dato> > ts){
     cout << "]"<<endl;
 }
 
-vector<Dato> crearFila(int M){
+
+
+vector<int> crearFilaEnteros(int M){
+    int i = 0;
+    vector<int> res;
+    while(i < M){
+        res.push_back(INT_MAX);
+        i++;
+    }
+    return res;
+}
+
+vector<vector< int > > matrizEnteros(int N, int M){
+    int i = 0;
+    vector<vector<int> > res;
+    vector<int> fila = crearFilaEnteros(M+1);
+    while(i <= N){
+        res.push_back(fila);
+        i++;
+    }
+    return res;
+}
+vector<bool> crearFilaBooleanos(int M){
+    int i = 0;
+    vector<bool> res;
+    while(i < M){
+        res.push_back(false);
+        i++;
+    }
+    return res;
+}
+
+vector<vector< bool > > matrizBooleana(int N, int M){
+    int i = 0;
+    vector<vector<bool> > res;
+    vector<bool> fila = crearFilaBooleanos(M+1);
+    while(i <= N){
+        res.push_back(fila);
+        i++;
+    }
+    return res;
+}
+
+vector<Dato> crearFilaDatos(int M){
     int i = 0;
     vector<Dato> res;
     while(i < M){
@@ -77,10 +145,10 @@ vector<Dato> crearFila(int M){
     return res;
 }
 
-vector<vector< Dato > > matriz(int N, int M){
+vector<vector< Dato > > matrizDatos(int N, int M){
     int i = 0;
     vector<vector<Dato> > res;
-    vector<Dato> fila = crearFila(M+1);
+    vector<Dato> fila = crearFilaDatos(M+1);
     while(i <= N){
         res.push_back(fila);
         i++;
@@ -133,7 +201,7 @@ vector<tuple<int,int,Dato> > Representador::listaDeIncidencia(){
 
 vector<vector <Dato> > Representador::matrizAdyacencia(){
     int N = _cantCiudades;
-    vector < vector <Dato> > res = matriz(N,N);
+    vector < vector <Dato> > res = matrizDatos(N,N);
     int i = 0;
     vector< vector<int> >& vs = _listaEntrada;
     while(i < vs.size()){
@@ -198,4 +266,29 @@ void mostrar(vector< vector <tuple <int,Dato> > > ts){
         cout << endl;
     }
   //  cout << "]"<<endl;
+}
+
+
+void agregarLindantes(vector<vector<Dato> >& matrizEntrada,list<tuple<int,int,int,int> >& ls,tuple<int,int,int,int> t){
+    int ciudad = get<0>(t);
+    int dondeVengo = get<1>(t);
+    int i = 0;
+    int cantidadDePremiumUsados = get<2>(t);
+    int distanciaRecorrida = get<3>(t);
+    while(i < (matrizEntrada[ciudad]).size()){
+        Dato datosCiudad = matrizEntrada[ciudad][i];
+        if (datosCiudad.distancia != -1 and i != dondeVengo){
+            int distancia = datosCiudad.distancia+distanciaRecorrida;
+            int premium;
+            if (datosCiudad.caminoPremium){
+                premium = cantidadDePremiumUsados + 1;
+            }else{
+                premium = cantidadDePremiumUsados;
+            }
+            ls.push_back(make_tuple(i,ciudad,premium,distancia));
+        }
+        i++;
+    }
+   
+
 }

@@ -2,8 +2,8 @@
 #include <ostream>
 #include <vector>
 #include <stdio.h>
-#include <limits.h>
 #include "representador.h"
+
 
 
 using namespace std;
@@ -97,6 +97,45 @@ void DijkstradirijidoSol(int origen, int destino, vector<vector <Dato> > &matriz
 }
 
 
+
+
+int DijkstraLuis(int origen,int destino,int cantCiudades,int k,vector<vector<Dato> > matrizEntrada){
+    vector<vector<bool> > yaPase = matrizBooleana(cantCiudades,k);
+    //matriz ciudad por cantidad de caminos premium que podemos usar
+    vector <vector< int > > caminosRecorridos = matrizEnteros(cantCiudades,k);
+    //matriz ciudad por cantidad de caminosP, distancia.
+    list<tuple<int,int,int,int> > listaLindantes;
+    //Dada una ciudad voy a queres sus adyacente, de donde vino, cantidad de caminos premium usados para llegar hasta ahi y la distancia.
+    listaLindantes.push_front(make_tuple(origen,0,0,0));
+    while(not listaLindantes.empty()){
+        tuple<int,int,int,int> t = listaLindantes.front();
+        listaLindantes.pop_front();
+        int ciudadADondeLlegue = get<0>(t);
+        int cantidadCP = get<2>(t);
+        int distancia = get<3>(t);
+        if(cantidadCP <= k){
+            if (not yaPase.at(ciudadADondeLlegue).at(cantidadCP) or distancia < caminosRecorridos.at(ciudadADondeLlegue).at(cantidadCP)){
+                agregarLindantes(matrizEntrada,listaLindantes,t);
+                //agregar lindante usa la segunda coordenada para saber de donde vino, asi no las vuelve a contar.
+                caminosRecorridos.at(ciudadADondeLlegue).at(cantidadCP) = distancia;
+                yaPase.at(ciudadADondeLlegue).at(cantidadCP) = true;
+            }
+        }
+    }
+   
+    int minimaDistancia = INT_MAX;
+    int i = 0;
+    while(i < caminosRecorridos[destino].size()){
+        minimaDistancia = min(minimaDistancia,caminosRecorridos[destino][i]);
+        i++;
+    }
+    if (minimaDistancia == INT_MAX){
+        return -1;
+    }else{
+        return minimaDistancia;
+    }
+}
+
 int main(){
     while(true){
         vector< vector<int> > res;
@@ -136,21 +175,16 @@ int main(){
         otra, caso contrario tendria que hacer un par de cambios pero no creo que sean tan forros(mejor commit ever).
         */
         Representador rep(cantCiudades,entrada);
-        mostrar(rep.matrizAdyacencia());
-        mostrar(rep.listaDeIncidencia());
+        //mostrar(rep.matrizAdyacencia());
+        //mostrar(rep.listaDeIncidencia());
         //mostrar(rep.listaDeAdyacencia());
         vector<vector <Dato> > matriz = rep.matrizAdyacencia();
         int distancias[cantCiudades + 1];
         int antecesor[cantCiudades + 1];
         int cantPremium[cantCiudades + 1];
         //bool rutasprem[cantCiudades + 1];
-        DijkstradirijidoSol(origen, destino ,matriz,cantCiudades, distancias, antecesor, cantPremium);
-        if(cantPremium <= k){
-        cout << "Dio esto: " << distancias[destino] << endl;
-    	}else{
-    		return min()
-
-    	}
+        cout << DijkstraLuis(origen,destino,cantCiudades,k,matriz) << endl;
+       
         //cout << "Dio esto: " << antecesor[1] <<  antecesor[2] << antecesor[3] << antecesor[4] << endl;
         //cout << "Dio esto: " << rutasprem[1] <<  rutasprem[2] << rutasprem[3] << rutasprem[4] << endl;
         //cout << "Dio esto: " << Dijkstradirijido(origen, destino ,matriz,cantCiudades)<< endl;

@@ -5,7 +5,7 @@
 #include <limits.h>
 #include <tuple>
 #include "aux.h" 
-
+#include <list>
 using namespace std;
 
 struct Dato{

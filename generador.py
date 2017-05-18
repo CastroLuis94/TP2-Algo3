@@ -53,7 +53,7 @@ def generador_grafo_completo(num_ciudades, porcentaje_premium,porcentaje_distanc
 if __name__ == "__main__":
     porcentaje_premium = 70
     ciudades = 2
-    while(ciudades <= 50):
+    while(ciudades <= 100):
         for i in range(0,100):
             generador_grafo_completo(ciudades,porcentaje_premium)
         ciudades+=1

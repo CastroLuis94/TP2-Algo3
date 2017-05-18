@@ -113,13 +113,11 @@ int DijkstraLuis(int origen,int destino,int cantCiudades,int k,vector<vector<Dat
         int ciudadADondeLlegue = get<0>(t);
         int cantidadCP = get<2>(t);
         int distancia = get<3>(t);
-        if(cantidadCP <= k){
-            if (not yaPase.at(ciudadADondeLlegue).at(cantidadCP) or distancia < caminosRecorridos.at(ciudadADondeLlegue).at(cantidadCP)){
-                agregarLindantes(matrizEntrada,listaLindantes,t);
-                //agregar lindante usa la segunda coordenada para saber de donde vino, asi no las vuelve a contar.
-                caminosRecorridos.at(ciudadADondeLlegue).at(cantidadCP) = distancia;
-                yaPase.at(ciudadADondeLlegue).at(cantidadCP) = true;
-            }
+        if (esElMejorCamino(caminosRecorridos,ciudadADondeLlegue,cantidadCP,distancia)){
+            agregarLindantes(matrizEntrada,listaLindantes,t,k);
+            //agregar lindante usa la segunda coordenada para saber de donde vino, asi no las vuelve a contar.
+            caminosRecorridos.at(ciudadADondeLlegue).at(cantidadCP) = distancia;
+            yaPase.at(ciudadADondeLlegue).at(cantidadCP) = true;
         }
     }
    
@@ -195,3 +193,52 @@ int main(){
 }
 
 
+
+/*
+int main(){
+    vector <int> imprimir;
+    while(true){
+        int cantCiudades;
+        cin >> cantCiudades;
+        // n es la candidad de ciudades
+        
+        int cantRutas;
+        cin >> cantRutas;
+        //m la cantidad de rutas
+        if(cantCiudades == -1 and cantRutas == -1){
+            break;
+        }
+        int origen;
+        cin >> origen;
+        
+        
+        int destino;
+        cin >> destino;
+        
+
+        int k;
+        cin >> k;
+        //k siendo la maxima cantidad de rutas premium que puede haber 
+        vector<vector< int > > entrada = levantarEntrada(cantRutas);
+      
+        Representador rep(cantCiudades,entrada);
+        //mostrar(rep.matrizAdyacencia());
+        //mostrar(rep.listaDeIncidencia());
+        //mostrar(rep.listaDeAdyacencia());
+        vector<vector <Dato> > matriz = rep.matrizAdyacencia();
+        int distancias[cantCiudades + 1];
+        int antecesor[cantCiudades + 1];
+        int cantPremium[cantCiudades + 1];
+        //bool rutasprem[cantCiudades + 1];
+        int aAgregar = DijkstraLuis(origen,destino,cantCiudades,k,matriz);
+        imprimir.push_back(aAgregar);
+       
+        //cout << "Dio esto: " << antecesor[1] <<  antecesor[2] << antecesor[3] << antecesor[4] << endl;
+        //cout << "Dio esto: " << rutasprem[1] <<  rutasprem[2] << rutasprem[3] << rutasprem[4] << endl;
+        //cout << "Dio esto: " << Dijkstradirijido(origen, destino ,matriz,cantCiudades)<< endl;
+    }
+    cout << "resultados = ";
+    mostrar(imprimir);
+    return 0;
+}
+*/

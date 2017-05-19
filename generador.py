@@ -27,20 +27,19 @@ class Tupla:
 
 
 def generador_grafo_completo(num_ciudades, porcentaje_premium,porcentaje_distancia=None):
-    rutas = (num_ciudades)*(num_ciudades) -num_ciudades
+    rutas = int((num_ciudades)*(num_ciudades-1)/2)
     print (str(num_ciudades) + " " + str(rutas)) 
     #imprimo la primera linea
-    c1 , c2 = random.sample(range(0,num_ciudades),2)
+    c1 , c2 = random.sample(range(1,num_ciudades+1),2)
     # imprimo la segunda linea c1,c2 elegidas de forma random(es random es sin repetidos)
     cantidad_premium = random.sample(range(0,rutas),1)[0]
     print(str(c1) + " " + str(c2) + " " + str(cantidad_premium))
-    posicion_de_premium = random.sample(range(0,rutas),int(rutas*(porcentaje_premium/100)))
     res = []
     for i in range(1,num_ciudades+1):
         for k in range(1,num_ciudades+1):
-            if (k != i):
+            if (k > i):
                 res.append(Tupla(i,k,0,None))
-               
+    posicion_de_premium = random.sample(range(0,len(res)),int(len(res)*(porcentaje_premium/100)) )
     for i in posicion_de_premium:
         c1 = (res[i]).c1
         c2 = (res[i]).c2
@@ -54,7 +53,7 @@ def generador_grafo_completo(num_ciudades, porcentaje_premium,porcentaje_distanc
 if __name__ == "__main__":
     porcentaje_premium = 70
     ciudades = 2
-    while(ciudades <= 50):
+    while(ciudades <= 100):
         for i in range(0,100):
             generador_grafo_completo(ciudades,porcentaje_premium)
         ciudades+=1

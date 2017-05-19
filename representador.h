@@ -5,7 +5,7 @@
 #include <limits.h>
 #include <tuple>
 #include "aux.h" 
-
+#include <list>
 using namespace std;
 
 struct Dato{
@@ -269,7 +269,7 @@ void mostrar(vector< vector <tuple <int,Dato> > > ts){
 }
 
 
-void agregarLindantes(vector<vector<Dato> >& matrizEntrada,list<tuple<int,int,int,int> >& ls,tuple<int,int,int,int> t){
+void agregarLindantes(vector<vector<Dato> >& matrizEntrada,list<tuple<int,int,int,int> >& ls,tuple<int,int,int,int> t, int k){
     int ciudad = get<0>(t);
     int dondeVengo = get<1>(t);
     int i = 0;
@@ -285,10 +285,20 @@ void agregarLindantes(vector<vector<Dato> >& matrizEntrada,list<tuple<int,int,in
             }else{
                 premium = cantidadDePremiumUsados;
             }
-            ls.push_back(make_tuple(i,ciudad,premium,distancia));
+            if(premium <= k){
+                ls.push_back(make_tuple(i,ciudad,premium,distancia));
+            }
         }
         i++;
     }
    
 
+}
+bool esElMejorCamino(vector<vector<int> >& caminosRecorridos,int ciudadADondeLlegue,int cantidadCP,int distancia){
+     int minimaDistancia = INT_MAX;
+     while(cantidadCP >= 0){
+        minimaDistancia = min(minimaDistancia,caminosRecorridos[ciudadADondeLlegue][cantidadCP]);
+        cantidadCP--;
+     }
+     return minimaDistancia > distancia;
 }

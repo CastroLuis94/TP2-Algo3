@@ -44,3 +44,17 @@ bool bellmanFord(int origen, vector<Eje> &grafo, int n, int m) {
 
     return true;
 }
+
+bool bellmanFordMod(vector<Eje> &grafo, int n, int m) {
+
+//    Agrego un vertice s t que se conectan a todos los nodos
+
+    for (int i = 0; i < n; ++i) {
+        Eje s = {i, n, 1};
+        Eje t = {n + 1, i, 1};
+        grafo.push_back(s);
+        grafo.push_back(t);
+    }
+
+    return bellmanFord(n, grafo, n + 2, m + n);
+}

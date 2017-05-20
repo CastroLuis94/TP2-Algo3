@@ -31,15 +31,29 @@ def generador_grafo_random(num_ciudades, num_rutas):
     for i in range(num_ciudades):
         c1 = ciudades_origen[i]
         c2 = ciudades_destino.pop()
-        print(f'{c1} {c2} {random.randint(0,200)}')
+        print(f'{c1} {c2} {random.randint(0,100)}')
     for i in range(num_ciudades, num_rutas):
         c1 = random.choice(ciudades_origen)
         c2 = ciudades_destino.pop()
-        print(f'{c1} {c2} {random.randint(0,200)}')
+        print(f'{c1} {c2} {random.randint(0,100)}')
+
+
+def generador_grafo_fuertemente_conexo(num_ciudades, num_rutas):
+    ciudades_origen = [i for i in range(0, num_ciudades)]
+    ciudades_destino = [random.choice(ciudades_origen) for _ in range(0, num_rutas)]
+    print(f'{num_ciudades} {num_rutas}')
+    for i in range(num_ciudades):
+        c1 = ciudades_origen[i]
+        c2 = ciudades_destino.pop()
+        print(f'{c1} {c2} {random.randint(0,100)}')
+    for i in range(num_ciudades, num_rutas):
+        c1 = random.choice(ciudades_origen)
+        c2 = ciudades_destino.pop()
+        print(f'{c1} {c2} {random.randint(0,100)}')
 
 
 if __name__ == "__main__":
 
-    for i in range(3, 100):
+    for i in range(3, 1000):
         generador_grafo_random(i, random.randint(i, i * (i - 1) / 2))
     print(-1, -1)

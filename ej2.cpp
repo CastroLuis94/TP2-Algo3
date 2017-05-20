@@ -77,7 +77,7 @@ int maximo(vector<Eje> &vector, int m) {
     return max;
 }
 
-int maxima_reduccion(vector<Eje> &grafo, int n, int m) {
+int maximaReduccion(vector<Eje> &grafo, int n, int m) {
     int sup = maximo(grafo, m) + 1;
     int inf = minimo(grafo, m);
     int c = sup;
@@ -115,7 +115,7 @@ int main() {
             Eje v = {c1, c2, p};
             provicia.push_back(v);
         }
-        int res = maxima_reduccion(provicia,cantCiudades,cantRutas);
+        int res = maximaReduccion(provicia, cantCiudades, cantRutas);
         cout << res << endl;
     }
 //    cout << "Fin de la ejecucion del algoritmo." << endl;

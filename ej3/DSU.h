@@ -10,7 +10,7 @@
 #include <list>
 using namespace std;
 
-
+//visto en clase para implementar Kruskal
 class DisjointSet{
     public:
     DisjointSet(int N);
@@ -37,7 +37,7 @@ int DisjointSet::find(int element){
     return padre_[element];
 }
 
-void DisjointSet::Nunion(int a, int b){
+void DisjointSet::Nunion(int a, int b){//funcion union de DSU, si la llamaba union me tiraba error.
 
     a = find(a);
     b = find(b);

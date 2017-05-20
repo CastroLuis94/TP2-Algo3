@@ -104,6 +104,13 @@ vector<int> crearFilaEnteros(int M){
     return res;
 }
 
+
+
+
+
+
+
+
 vector<vector< int > > matrizEnteros(int N, int M){
     int i = 0;
     vector<vector<int> > res;
@@ -114,6 +121,18 @@ vector<vector< int > > matrizEnteros(int N, int M){
     }
     return res;
 }
+
+vector<vector< int > > matrizEnterosBaja(int N, int M){//DIFIERE DE matrizEnteros EN LOS INDICES.
+    int i = 0;
+    vector<vector<int> > res;
+    vector<int> fila = crearFilaEnteros(M);
+    while(i < N){
+        res.push_back(fila);
+        i++;
+    }
+    return res;
+}
+
 vector<bool> crearFilaBooleanos(int M){
     int i = 0;
     vector<bool> res;
@@ -174,6 +193,7 @@ class Representador{
         vector< tuple<int,int,Dato> > listaDeIncidencia();
         vector< vector<Dato> > matrizAdyacencia();
         vector < vector<tuple <int,Dato> > > listaDeAdyacencia();
+        vector < vector <int> > matrizConPremiums(int k);
     private:
         vector<vector<int> > _listaEntrada;
         int _cantCiudades;
@@ -198,6 +218,61 @@ vector<tuple<int,int,Dato> > Representador::listaDeIncidencia(){
     }
     return res;
 }
+
+//vs[i][0]= c1, vs[i][1] = c2, vs[i][2]= premium, vs[i][3]= distancia
+vector< vector <int> > Representador::matrizConPremiums(int k){
+    int N = _cantCiudades;
+    vector < vector <int> > res = matrizEnterosBaja((N+1)*(k+1),(N+1)*(k+1));//CREA MATRIZ RANGO (LONGPASADA,LONGPASADA) 
+    int i = 0;
+    vector< vector<int> >& vs = _listaEntrada;
+    while(i < vs.size()){         
+         int ciudad1 = vs[i][0]*(k+1);
+         int ciudad2 =  vs[i][1]*(k+1);
+         int ciudadaux;         
+         int distancia = vs[i][3];
+         bool esPremium = vs[i][2];
+         if(esPremium){
+            ciudadaux= ciudad2 +1;
+         }else{
+            ciudadaux = ciudad2;
+         }
+        for(int j = ciudad1; j< ciudad1+(k+1); j++){                 
+            if((j < ciudad1+ k) or (!esPremium )){                
+                res[j][ciudadaux] = distancia;
+                ciudadaux++;
+            }            
+        }
+        if(esPremium){
+            ciudadaux= ciudad1+ 1;
+        }else{
+            ciudadaux = ciudad1;
+        }
+        for(int j = ciudad2; j< ciudad2+(k+1); j++){                 
+            if((j < ciudad2+ k) or (!esPremium )){                
+                res[j][ciudadaux] = distancia;
+                ciudadaux++;
+            }            
+        }
+ 
+        i++;
+    }
+    for(int n = 0; n < (N+1)*(k+1); n++){
+        res[n][n] = 0;
+    }   
+    return res;
+}
+
+//Los k+1 son para poder hacer el mapeo. Ahora, la logica de matrizConPremiums es, para cada arista, veo la c1 y c2 y actualizo la matriz con distancias(x default es INT_MAX)
+//Para hacerlo en una matriz de (N+1)*(k+1), la c1  y c2 es ciudad*k, y recorremos de ciudad*k + ciudad*k+k, fijandonos para la ultima columna/fila(limite k) el no pasarnos de largo
+//usamos ciudadaux para representar la otra ciudad (xque debo modificar la ciudad mientras recorro) y es la ciudad adyacente (y +1 si el camino es premium)
+
+
+
+
+
+
+
+
 
 vector<vector <Dato> > Representador::matrizAdyacencia(){
     int N = _cantCiudades;

@@ -9,58 +9,37 @@
 
 using namespace std;
 
-bool noSeteados(bool S[], int N){
-    bool b= true;
-    for(int i =1; i<N+1; i++){
-        if(S[i] == false){
-            return true;
-        }
-    }
-    return false;
-
-}
-
-
-
-int minimoNoProcesado(int distancias[], bool S[], int N)
-{
-   //habia un min_index
-   int min = INT_MAX;
-   int indice;
-   for (int n = 1; n < N+1; n++){
-        if (S[n] == false && distancias[n] < min){
-            min = distancias[n], indice = n;
-        }
-    }
-  
-   return indice;
-}
 
 
 //me guardo la lista de las aristas en formato(c, c1, c2, e)//las ciudades van de 0 a N-1
 list< tuple<int, int, int, int> >  Kruskal(list<tuple<int, int, int, int> >& aristas, int &peso, int &rutas, int n){    
-    DisjointSet DisSet(n);
+    DisjointSet DisSet(n);//esta en DSU.h Inicio todos los nodos como particiones distintas
     list< tuple<int, int, int, int> > res;
-    aristas.sort();//se supone que esto es O(NlogN)
-    for(list< tuple<int, int, int, int> >::iterator it = aristas.begin(); it != aristas.end(); it++){//Recorro la lista de manera ordenada.  
-        if (DisSet.find(get<1>(*it)) != DisSet.find(get<2>(*it))){            
+    aristas.sort();//se supone que esto es O(MlogM)= O(n^2 log(n^2)) = O(n^2 2log(n)) = O(n^2 log(n)) 
+    for(list< tuple<int, int, int, int> >::iterator it = aristas.begin(); it != aristas.end(); it++){ 
+        if (DisSet.find(get<1>(*it)) != DisSet.find(get<2>(*it))){//si estan en != particion no forman ciclos, y es el menor por recorrer en orden          
             res.push_back(*it);
-            rutas++;
-            cout<< "falla"<< get<3>(*it)<< " " << get<0>(*it) << endl;
+            rutas++;            
             if(!(get<3>(*it))){
-                peso = peso + get<0>(*it);                
+                peso = peso + get<0>(*it);   //si no existia, sumo el costo de construir la ruta             
             }            
-            DisSet.Nunion(get<1>(*it), get<2>(*it));            
+            DisSet.Nunion(get<1>(*it), get<2>(*it)); //Nunion en DSU.h, uno las particiones.            
         }else{
             if((get<3>(*it))){
-                peso = peso - get<0>(*it);//si existe los costos son negativos.(por lo que para que sume bien debo darlo vuelta)
+                peso = peso - get<0>(*it);//si existe la ruta los costos son negativos.(por eso resto)
             }
         }
     }   
     return res;
 }
 
+/*Recorro la lista de manera ordenada.(aristas ordenadas por costo, si existen tienen costo negativo(al
+levantar entrada lo veo)), si no existen el costo es positivo*/
 
+
+
+
+// acomodarAristas me deja list<tuple<c1,c2> >(aristas)
 list<tuple<int, int> > acomodarAristas(list<tuple< int, int, int, int> > &lista ){
     list<tuple<int, int> > res;
     tuple<int, int> posicion;
@@ -89,48 +68,29 @@ int main(){
         
 
         cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
-       // vector<vector< int > > entrada = levantarEntrada(cantRutas);
-        list<tuple<int, int, int, int > > aristas = listaAristas(cantRutas);        
-        //me guardo la lista de las aristas en formato(c, c1, c2, e)
-       
 
-        /* Aclaracion importate.
-        Todas las lineas implementadas para tomar la entrada pensaba ponerlo en una funcion auxiliar grande, pero como tengo que fijarme
-        si me dan -1 -1 lo hice asi, una funcion en C++ tiene solo un tipo de salida, no puedo decir "te doy void si me pasan -1 -1 o
-        un vector de vector si me dan otra cosa." Ahora, este algoritmo solo toma las entradas, despues de eso tendriamos que poner que 
-        tipo de representacion queremos y correr el algoritmo que lo resuelve, si los profes corren nuestra implementacion con un 
-        txt estoy bastante seguro que esto toma las X entradas y las resuelve X veces.
-        Cosa importante, estoy asumiendo que el -1 -1 son los primeros numeros al empezar una nueva entrada y no estan en el medio de
-        otra, caso contrario tendria que hacer un par de cambios pero no creo que sean tan forros(mejor commit ever).
-        */
-       // Representador rep(cantCiudades,entrada);
-        //mostrar(rep.matrizAdyacencia());
-        //mostrar(rep.listaDeIncidencia());
-        //mostrar(rep.listaDeAdyacencia());
-        //vector<vector <Dato> > matriz = rep.matrizAdyacencia();
+        list<tuple<int, int, int, int > > aristas = listaAristas(cantRutas);  //listaAristas en aux.h      
+         //Me guardo la lista de las aristas en formato(c, c1, c2, e). 
+
+        /*Uso un listaAristas en vez de la ListadeAdjacencia porque:
+         si no deberia definir operator < de Dato, y porque necesito la lista de aristas
+        (y en listadeIncididencia deberia devolver vector< tuple<Dato, int, int> >) puesto que necesito
+        tener el Dato(y en su operator <, el costo) primero para ordenar bien las aristas.
+        Debido a todos estos problemas list<tuple<int, int, int, int> >resulta mas comodo(puede ser vector
+         en vez de lista) */    
         int peso = 0;
         int rutas = 0;       
         list<tuple<int, int, int, int> > resultado = Kruskal(aristas,  peso,  rutas, cantCiudades);
         cout << "peso"<<peso << endl;
         list<tuple<int, int> > aristassolucion = acomodarAristas(resultado);
-
-        cout<< peso <<" "<< rutas << " ,";
+        //el resultado de Kruskal es una list<tuple<c, c1, c2, e> >, acomodarAristas me deja list<tuple<c1,c2> >(aristas)
+        cout<< peso <<" "<< rutas << " ";
+        int i =1;
         for(list<tuple<int, int> >::iterator iter = aristassolucion.begin(); 
         iter != aristassolucion.end(); iter++){
-        cout << get<0>(*iter) << " " << get<1>(*iter) << ", ";
+        cout << "c"<<i << get<0>(*iter) << " " << "c"<< i <<get<1>(*iter) << " ";
         } 
         cout << endl;
-    
-
-        //int distancias[cantCiudades + 1];
-        //int antecesor[cantCiudades + 1];
-        //int cantPremium[cantCiudades + 1];
-        //bool rutasprem[cantCiudades + 1];
-        //cout << DijkstraLuis(origen,destino,cantCiudades,k,matriz) << endl;
-       
-        //cout << "Dio esto: " << antecesor[1] <<  antecesor[2] << antecesor[3] << antecesor[4] << endl;
-        //cout << "Dio esto: " << rutasprem[1] <<  rutasprem[2] << rutasprem[3] << rutasprem[4] << endl;
-        //cout << "Dio esto: " << Dijkstradirijido(origen, destino ,matriz,cantCiudades)<< endl;
     }
   
     cout << "Fin de la ejecucion del algoritmo." << endl;

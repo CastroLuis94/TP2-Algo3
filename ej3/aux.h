@@ -34,7 +34,7 @@ vector<vector< int > > levantarEntrada(int cantRutas){
 }
 
 
-list<tuple<int, int, int, int> > listaAristas(int cantRutas){//me guardo la lista de las aristas en formato(c, c1, c2, e)
+list<tuple<int, int, int, int> > listaAristas(int cantRutas){
     int i = 0;
     list<tuple< int, int, int, int > > res;//la arista es un vector.
     for(int i =0; i< cantRutas; i++){
@@ -59,7 +59,7 @@ list<tuple<int, int, int, int> > listaAristas(int cantRutas){//me guardo la list
     }
     return res;
 }
-
+//listaArista me guarda la lista de las aristas en formato(c, c1, c2, e)
 
 
 

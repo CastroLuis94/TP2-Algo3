@@ -12,7 +12,7 @@ struct Eje {
 };
 
 
-void relajar(vector<int> &distancias, Eje grafo) {
+void relajar(vector<int> &distancias, Eje &grafo) {
     if (distancias[grafo.origen] + grafo.peso < distancias[grafo.destino]) {
         distancias[grafo.destino] = distancias[grafo.origen] + grafo.peso;
     }
@@ -42,7 +42,7 @@ bool bellmanFord(int origen, vector<Eje> &grafo, int n, int m) {
 
 bool bellmanFordMod(vector<Eje> &grafo, int n, int m, int c) {
 
-//    Agrego un vertice s t que se conectan a todos los nodos
+    //    Agrego un vertice s t que se conectan a todos los nodos
 
     vector<Eje> grafo_auxiliar;
     for (int j = 0; j < m; ++j) {
@@ -57,7 +57,7 @@ bool bellmanFordMod(vector<Eje> &grafo, int n, int m, int c) {
         grafo_auxiliar.push_back(t);
     }
 
-    return bellmanFord(n, grafo, n + 2, m + n);
+    return bellmanFord(n, grafo_auxiliar, n + 2, m + n);
 }
 
 
@@ -78,30 +78,36 @@ int maximo(vector<Eje> &vector, int m) {
 }
 
 int maxima_reduccion(vector<Eje> &grafo, int n, int m) {
-    int sup = maximo(grafo, m);
+    int sup = maximo(grafo, m) + 1;
     int inf = minimo(grafo, m);
     int c = sup;
 
-    while (inf < sup) {
+    while (inf + 1 < sup) {
         c = ((sup - inf) / 2) + inf;
         if (bellmanFordMod(grafo, n, m, c)) {
             inf = c;
         } else {
             sup = c;
         }
+
     }
-    return c;
+    return inf;
 
 }
 
 int main() {
     vector<Eje> provincia;
-    Eje ruta_0 = {0, 1, 2};
-    Eje ruta_1 = {1, 2, 1};
-    Eje ruta_2 = {2, 0, 1};
+    Eje ruta_0 = {0, 1, 1};
+    Eje ruta_1 = {1, 2, 5};
+    Eje ruta_2 = {2, 1, 5};
+
+
+
     provincia.push_back(ruta_0);
     provincia.push_back(ruta_1);
     provincia.push_back(ruta_2);
+
+
     int res = maxima_reduccion(provincia, 3, 3);
 
     cout << res << '\n';

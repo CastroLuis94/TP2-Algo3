@@ -96,19 +96,28 @@ int maxima_reduccion(vector<Eje> &grafo, int n, int m) {
 }
 
 int main() {
-    vector<Eje> provincia;
-    Eje ruta_0 = {0, 1, 1};
-    Eje ruta_1 = {1, 2, 5};
-    Eje ruta_2 = {2, 1, 5};
-
-
-
-    provincia.push_back(ruta_0);
-    provincia.push_back(ruta_1);
-    provincia.push_back(ruta_2);
-
-
-    int res = maxima_reduccion(provincia, 3, 3);
-
-    cout << res << '\n';
+    while (true) {
+        vector<Eje> provicia;
+        int cantCiudades;
+        int cantRutas;
+//        cout << "Cantidad de Ciudades y Rutas." << endl;
+        cin >> cantCiudades >> cantRutas;
+        // n es la candidad de ciudades
+        if(cantCiudades == -1 and cantRutas == -1){
+            break;
+        }
+        for (int i = 0; i < cantRutas; ++i) {
+//            cout << "Ingrese una ruta valida." << endl;
+            int c1;
+            int c2;
+            int p;
+            cin >> c1 >> c2 >> p;
+            Eje v = {c1, c2, p};
+            provicia.push_back(v);
+        }
+        int res = maxima_reduccion(provicia,cantCiudades,cantRutas);
+        cout << res << endl;
+    }
+//    cout << "Fin de la ejecucion del algoritmo." << endl;
+    return 0;
 }

@@ -20,75 +20,36 @@ class Tupla:
         return representacion
     
 
-def armarArbol(arbol):
-    i = 1
-    res = []
-    while i< len(arbol):
-        res.append(Tupla(arbol[0],arbol[i],0,None))
-        i += 1
-    return res
 
-def nodos_sueltos(arbol):
-    if len(arbol) == 1:
-        return arbol
-    else:
-        res = []
-        for i in range(0,len(arbol)):
-            for k in range(i+1, len(arbol) + 1):
-                res.append(Tupla(i,k,0,None))
-        return res
 
-def conectar(arboles,nodos_sueltos):
-    res = []
-    for arbol in arboles:
-        for elem in arbol:
-            res.append(elem)
-    i = 0
-    while i < len(arboles)-1:
-        res.append(Tupla(arboles[i][0].c1,arboles[i+1][0].c1,0,None))
-        i+=1
-    if len(arboles) >= 1:
-        for elem in nodos_sueltos:
-            res.append(Tupla(arboles[i][0].c1,elem,0,None))
-    else:
-        while i < len(nodos_sueltos)-1:
-            res.append(Tupla(nodos_sueltos[i],nodos_sueltos[i+1],0,None))
-            i+=1
-    return res
-
-def tamanio_arboles(numero_ciudades,cant_arboles):
-    res = []
-    while(numero_ciudades >= cant_arboles):
-        res.append(int(cant_arboles))
-        numero_ciudades -= cant_arboles
-    if numero_ciudades != 0:
-        res.append(numero_ciudades)
-    return res
 
 def generador_grafo_conexo(numero_ciudades,porcentaje_premium):
     numero_aristas = numero_ciudades-1
-    aristas = []
-    cant_arboles = random.randrange(2,numero_ciudades + 1)
-    arboles = []
     ciudades = range(1,numero_ciudades + 1)
-    arbol_trivial = []
-    tamanio_de_arboles = tamanio_arboles(numero_ciudades,cant_arboles)
-    print("{0} {1}".format(numero_ciudades, numero_aristas))
-    c1, c2 = random.sample(range(1, numero_ciudades + 1), 2)
-    cantidad_premium_permitidos = random.sample(range(0, numero_aristas), 1)[0]
-    print("{0} {1} {2}".format(c1, c2, cantidad_premium_permitidos)) 
-    for i in range(len(tamanio_de_arboles)):
-        arbol = random.sample(ciudades, tamanio_de_arboles[0])
-        tamanio_de_arboles = tamanio_de_arboles[1:]
-        ciudades = list(set(ciudades) - set(arbol))
-        if len(arbol) > 1:
-            arboles.append(armarArbol(arbol))
+    caminos = []
+    c1 , c2 = random.sample(ciudades, 2)
+    caminos.append(Tupla(c1,c2,0,None))
+    ciudades = list(set(ciudades) - set([c1,c2]))
+    while len(ciudades) > 0:
+        c = random.sample(ciudades, 1)[0]
+        ciudades.remove(c)
+        ciudad_a_conectarse = random.sample([0,1], 1)
+        camino_elegido = random.sample(range(len(caminos)), 1)[0]
+        if ciudad_a_conectarse == 0:
+            caminos.append(Tupla((caminos[camino_elegido]).c1,c,0,None))
         else:
-            arbol_trivial.append(arbol[0])
-    res = conectar(arboles,arbol_trivial)
-    cantidad_premium = random.sample(range(0,len(res)), int(len(res)*porcentaje_premium/100))
+            caminos.append(Tupla((caminos[camino_elegido]).c2,c,0,None))
+    cantidad_premium = random.sample(range(0,len(caminos)), int(len(caminos)*porcentaje_premium/100))
+    res = caminos
     for premium in cantidad_premium:
-        res[premium] = Tupla(res[premium].c1,res[premium].c2,1,None)
+        res[premium] = Tupla(caminos[premium].c1,caminos[premium].c2,1,None)
+    print("{0} {1}".format(numero_ciudades, len(caminos)))
+    c1, c2 = random.sample(range(1, numero_ciudades + 1), 2)
+    if len(res) > 0:
+        cantidad_premium_permitidos = random.sample(range(0, len(res)), 1)[0]
+        print("{0} {1} {2}".format(c1, c2, cantidad_premium_permitidos)) 
+    else:
+        print("{0} {1} {2}".format(c1, c2, 0)) 
     for elem in res:
         print(elem)
    

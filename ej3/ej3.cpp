@@ -17,13 +17,13 @@ list< tuple<int, int, int, int> >  Kruskal(list<tuple<int, int, int, int> >& ari
     list< tuple<int, int, int, int> > res;
     aristas.sort();//se supone que esto es O(MlogM)= O(n^2 log(n^2)) = O(n^2 2log(n)) = O(n^2 log(n)) 
     for(list< tuple<int, int, int, int> >::iterator it = aristas.begin(); it != aristas.end(); it++){ 
-        if (DisSet.find(get<1>(*it)) != DisSet.find(get<2>(*it))){//si estan en != particion no forman ciclos, y es el menor por recorrer en orden          
+        if (DisSet.find(get<1>(*it)-1) != DisSet.find(get<2>(*it)-1)){//si estan en != particion no forman ciclos, y es el menor por recorrer en orden          
             res.push_back(*it);
             rutas++;            
             if(!(get<3>(*it))){
                 peso = peso + get<0>(*it);   //si no existia, sumo el costo de construir la ruta             
             }            
-            DisSet.Nunion(get<1>(*it), get<2>(*it)); //Nunion en DSU.h, uno las particiones.            
+            DisSet.Nunion(get<1>(*it)-1, get<2>(*it)-1); //Nunion en DSU.h, uno las particiones.            
         }else{
             if((get<3>(*it))){
                 peso = peso - get<0>(*it);//si existe la ruta los costos son negativos.(por eso resto)
@@ -89,6 +89,7 @@ int main(){
         for(list<tuple<int, int> >::iterator iter = aristassolucion.begin(); 
         iter != aristassolucion.end(); iter++){
         cout << "c"<<i << get<0>(*iter) << " " << "c"<< i <<get<1>(*iter) << " ";
+        i++;
         } 
         cout << endl;
     }

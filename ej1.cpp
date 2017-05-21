@@ -46,7 +46,7 @@ void Dijkstradirijido(int origen, vector<vector <int> > &matriz, int N, int k, i
      
        //cout << "DEJEN LOS CORES" << endl;  
        for (int n = (k+1); n < totalarreglo; n++){  
-            if (!S[n] && ((matriz[u][n]) < INT_MAX)  && distancias[u]+(matriz[u][n]) < distancias[n]){//&& (distancias[u]!= INT_MAX)
+            if (!S[n] && ((matriz[u][n]) > -1)  && distancias[u]+(matriz[u][n]) < distancias[n]){//&& (distancias[u]!= INT_MAX)
              distancias[n] = distancias[u] + (matriz[u][n]);                         
             }
         }
@@ -150,13 +150,16 @@ int main(){
 
         Representador rep(cantCiudades,entrada);       
         vector <vector <int> > matriz = rep.matrizConPremiums(k);//Matriz de (n*k) nodos.
+       // mostrar(matriz);
         int distancias[(cantCiudades + 1) * (k+1)]; 
-        Dijkstradirijido((origen*(k+1)), matriz, cantCiudades, k, distancias);
+        Dijkstradirijido((origen*(k+1)), matriz, cantCiudades, k, distancias);  
         int minimaDistancia = INT_MAX;
 
         int i = (destino*(k+1));
         while(i < (destino*(k+1)+ (k+1)) ){
+            if(distancias[i] >= 0){
             minimaDistancia = min(minimaDistancia,distancias[i]);
+            }
             i++;
         }
         if (minimaDistancia == INT_MAX){

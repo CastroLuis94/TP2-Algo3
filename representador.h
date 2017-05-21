@@ -104,6 +104,15 @@ vector<int> crearFilaEnteros(int M){
     return res;
 }
 
+vector<int> crearFilaEnterosBaja(int M){
+    int i = 0;
+    vector<int> res;
+    while(i < M){
+        res.push_back(-1);
+        i++;
+    }
+    return res;
+}
 
 
 
@@ -125,7 +134,7 @@ vector<vector< int > > matrizEnteros(int N, int M){
 vector<vector< int > > matrizEnterosBaja(int N, int M){//DIFIERE DE matrizEnteros EN LOS INDICES.
     int i = 0;
     vector<vector<int> > res;
-    vector<int> fila = crearFilaEnteros(M);
+    vector<int> fila = crearFilaEnterosBaja(M);
     while(i < N){
         res.push_back(fila);
         i++;

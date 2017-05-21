@@ -57,6 +57,7 @@ def generador_grafo_conexo(numero_ciudades):
         res.remove(aBorrar)
     for aAgregar in caminos:
         res.append(aAgregar)
+    random.shuffle(res)
     for elem in res:
         print(elem)
 
@@ -64,8 +65,8 @@ def generador_grafo_conexo(numero_ciudades):
 
 if __name__ == "__main__":
     ciudades = 2
-    while(ciudades <= 5):
-        for i in range(0,1):
+    while(ciudades <= 100):
+        for i in range(0,100):
             generador_grafo_conexo(ciudades)
         ciudades+=1
     print(str(-1))

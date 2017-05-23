@@ -125,8 +125,8 @@ void DijkstraLuis(int origen,int destino,int cantCiudades,int k,vector<vector<Da
 int main(){
      char buffer[300]={0};   // lo usaremos para guardar el nombre del fichero
     
-    
-    sprintf(buffer, "ejercicio1_test1.csv"); // Ahora tenemos en buffer = "holaXX.txt"       
+    vector<int> archivo;
+    sprintf(buffer, "ejercicio1_test1.txt"); // Ahora tenemos en buffer = "holaXX.txt"       
     
       
     ofstream salida;
@@ -137,45 +137,43 @@ int main(){
         cerr << "No se abrio bien el archivo" << endl;
         exit(1);
     }
-    salida << "Ciudades, Rutas, cantPremium, tiempo1\n";
+   // salida << "Ciudades, Rutas, cantPremium, tiempo1\n";
 
 
     while(true){
         vector< vector<int> > res;
-        cout << "ingrese la cantidad de ciudades" <<endl;
+        //cout << "ingrese la cantidad de ciudades" <<endl;
         int cantCiudades;
         cin >> cantCiudades;
         // n es la candidad de ciudades
         
-        cout << "ingrese la cantidad de rutas" <<endl;
+        //cout << "ingrese la cantidad de rutas" <<endl;
         int cantRutas;
         cin >> cantRutas;
         //m la cantidad de rutas
-        if(cantCiudades == -1 and cantRutas == -1){
-            salida.close();
+        if(cantCiudades == -1 and cantRutas == -1){            
             break;
         }
-        cout << "¿Cual es la ciudad de origen?" <<endl;
+        //cout << "¿Cual es la ciudad de origen?" <<endl;
         int origen;
         cin >> origen;
         
-        cout << "¿Cual es la ciudad de destino?" <<endl;
+        //cout << "¿Cual es la ciudad de destino?" <<endl;
         int destino;
         cin >> destino;
         
-        cout << "¿Cual es la cantidad de rutas premium?" <<endl;
+        //cout << "¿Cual es la cantidad de rutas premium?" <<endl;
         int k;
         cin >> k;
         //k siendo la maxima cantidad de rutas premium que puede haber 
-        cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
+       // cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
         vector<vector< int > > entrada = levantarEntrada(cantRutas);//cada vector<int> es de lon = 4, y es una arista.En formato (c1, c2, p, distancia)        
 
         Representador rep(cantCiudades,entrada);
-               
+        auto start = ya();       
         vector <vector <int> > matriz = rep.matrizConPremiums(k);//Matriz de (n*k) nodos.
        // mostrar(matriz);
-        int distancias[(cantCiudades + 1) * (k+1)];
-        auto start = ya();                       
+        int distancias[(cantCiudades + 1) * (k+1)];                               
         Dijkstradirijido((origen*(k+1)), matriz, cantCiudades, k, distancias);                 
         int minimaDistancia = INT_MAX;
         int i = (destino*(k+1));
@@ -188,13 +186,26 @@ int main(){
         if (minimaDistancia == INT_MAX){
             minimaDistancia = -1;
         }
-        auto end = ya();       
-        salida << cantCiudades << ";" << cantRutas << ";" << k << ";"<<chrono::duration_cast<chrono::nanoseconds>(end-start).count() << endl;            
+        auto end = ya();
+        archivo.push_back(chrono::duration_cast<chrono::nanoseconds>(end-start).count());
+        //salida << cantCiudades << ";" << cantRutas << ";" << k << ";"<<chrono::duration_cast<chrono::nanoseconds>(end-start).count() << endl;            
         cout << minimaDistancia << endl;
         //cout << DijkstraLuis(origen,destino,cantCiudades,k,matriz) << endl;
 
     }  
-    cout << "Fin de la ejecucion del algoritmo." << endl;
+    //cout << "Fin de la ejecucion del algoritmo." << endl;
+    salida << "res = ";
+    salida << "[";
+    int i = 0;    
+    while(i < archivo.size()){
+        salida << archivo[i];
+        i++;
+        if(i < archivo.size()){
+            salida << ",";
+        }
+    }
+    salida << "]" <<endl; 
+    salida.close();          
     return 0;
 }
 

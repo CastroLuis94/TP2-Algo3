@@ -111,13 +111,13 @@ int main() {
       
     ofstream salida;
     salida.open(buffer, ios::out);
-    
+    vector<int> archivo;
 
     if(salida.fail()){
         cerr << "No se abrio bien el archivo" << endl;
         exit(1);
     }
-    salida << "Ciudades, Rutas, tiempo1\n";
+    //salida << "Ciudades, Rutas, tiempo1\n";
 
     while (true) {
         vector<Eje> provicia;
@@ -142,9 +142,22 @@ int main() {
         auto start = ya(); 
         int res = maximaReduccion(provicia, cantCiudades, cantRutas);
         auto end = ya();
-        salida << cantCiudades << ";" << cantRutas << ";" <<chrono::duration_cast<chrono::nanoseconds>(end-start).count() << endl;
+        archivo.push_back(chrono::duration_cast<chrono::nanoseconds>(end-start).count());
+        //salida << cantCiudades << ";" << cantRutas << ";" <<chrono::duration_cast<chrono::nanoseconds>(end-start).count() << endl;
         cout << res << endl;
     }
+    salida << "res = ";
+    salida << "[";
+    int i = 0;    
+    while(i < archivo.size()){
+        salida << archivo[i];
+        i++;
+        if(i < archivo.size()){
+            salida << ",";
+        }
+    }
+    salida << "]" <<endl; 
+    salida.close();          
 //    cout << "Fin de la ejecucion del algoritmo." << endl;
     return 0;
 }

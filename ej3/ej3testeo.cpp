@@ -67,7 +67,7 @@ int main(){
     
     
     sprintf(buffer, "ejercicio3_test1.csv"); // Ahora tenemos en buffer = "holaXX.txt"       
-    
+    vector<int> archivo;
       
     ofstream salida;
     salida.open(buffer, ios::out);
@@ -81,18 +81,18 @@ int main(){
 
     while(true){
         vector< vector<int> > res;
-        cout << "ingrese la cantidad de ciudades" <<endl;
+        //cout << "ingrese la cantidad de ciudades" <<endl;
         int cantCiudades;
         cin >> cantCiudades;
         // n es la candidad de ciudades
         if(cantCiudades == -1){
-            salida.close();
+            //salida.close();
             break;
         }
         int cantRutas = (cantCiudades*(cantCiudades-1))/2;
         
 
-        cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
+        //cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
 
         list<tuple<int, int, int, int > > aristas = listaAristas(cantRutas);  //listaAristas en aux.h      
          //Me guardo la lista de las aristas en formato(c, c1, c2, e). 
@@ -102,15 +102,16 @@ int main(){
         (y en listadeIncididencia deberia devolver vector< tuple<Dato, int, int> >) puesto que necesito
         tener el Dato(y en su operator <, el costo) primero para ordenar bien las aristas.
         Debido a todos estos problemas list<tuple<int, int, int, int> >resulta mas comodo(puede ser vector
-         en vez de lista) */    
-        int peso = 0;
-        int rutas = 0;  
+         en vez de lista) */ 
         auto start = ya();     
-        list<tuple<int, int, int, int> > resultado = Kruskal(aristas,  peso,  rutas, cantCiudades);         
-        salida << cantCiudades  << ";" <<chrono::duration_cast<chrono::nanoseconds>(end-start).count() << endl;
+        int peso = 0;
+        int rutas = 0;            
+        list<tuple<int, int, int, int> > resultado = Kruskal(aristas,  peso,  rutas, cantCiudades);       
+        //salida << cantCiudades  << ";" <<chrono::duration_cast<chrono::nanoseconds>(end-start).count() << endl;
         list<tuple<int, int> > aristassolucion = acomodarAristas(resultado);        
         //el resultado de Kruskal es una list<tuple<c, c1, c2, e> >, acomodarAristas me deja list<tuple<c1,c2> >(aristas)
         auto end = ya();
+        archivo.push_back(chrono::duration_cast<chrono::nanoseconds>(end-start).count());
         cout<< peso <<" "<< rutas << " ";
         int i =1;
         for(list<tuple<int, int> >::iterator iter = aristassolucion.begin(); 
@@ -120,8 +121,19 @@ int main(){
         } 
         cout << endl;
     }
-  
-    cout << "Fin de la ejecucion del algoritmo." << endl;
+    salida << "res = ";
+    salida << "[";
+    int i = 0;    
+    while(i < archivo.size()){
+        salida << archivo[i];
+        i++;
+        if(i < archivo.size()){
+            salida << ",";
+        }
+    }
+    salida << "]" <<endl; 
+    salida.close();  
+    //cout << "Fin de la ejecucion del algoritmo." << endl;
     return 0;
 }
 

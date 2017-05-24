@@ -144,6 +144,7 @@ int main(){
         cout << "¿Cual es la cantidad de rutas premium?" <<endl;
         int k;
         cin >> k;
+        k = min(k,cantCiudades);
         //k siendo la maxima cantidad de rutas premium que puede haber 
         cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
         vector<vector< int > > entrada = levantarEntrada(cantRutas);//cada vector<int> es de lon = 4, y es una arista.En formato (c1, c2, p, distancia)        

@@ -23,7 +23,7 @@ def generador_grafo_desconectado(num_ciudades):
 
 
 if __name__ == "__main__":
-    for i in range(2, 300+1):
+    for i in range(2, 500+1):
         # generador_grafo_random(i, random.randint(i, i*(i-1)))
         generador_grafo_desconectado(i)
     print(-1, -1)

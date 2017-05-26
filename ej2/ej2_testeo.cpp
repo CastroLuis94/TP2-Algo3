@@ -1,12 +1,12 @@
+#include "aux.cpp"
+
 #include <iostream>
-#include <vector>
-#include <limits.h>
-#include <chrono>
 #include <time.h>
+#include <chrono>
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
-#include "ej2.cpp"
+
 #define ya chrono::high_resolution_clock::now
 
 using namespace std;
@@ -23,7 +23,7 @@ int main() {
 
     if(salida.fail()){
         cerr << "No se abrio bien el archivo" << endl;
-        exit(1);
+        return 1;
     }
     //salida << "Ciudades, Rutas, tiempo1\n";
 

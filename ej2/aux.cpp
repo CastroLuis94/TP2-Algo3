@@ -36,24 +36,17 @@ bool bellmanFord(int origen, std::vector<Eje> &grafo, int n, int m) {
     return true;
 }
 
-bool bellmanFordMod(std::vector<Eje> &grafo, int n, int m, int c) {
+bool bellmanFordMod(std::vector<Eje> &grafo, int n, int m) {
 
     //    Agrego un vertice s t que se conectan a todos los nodos
-
-    std::vector<Eje> grafo_auxiliar;
-    for (int j = 0; j < m; ++j) {
-        Eje v = {grafo[j].origen, grafo[j].destino, grafo[j].peso - c};
-        grafo_auxiliar.push_back(v);
-    }
-
     for (int i = 0; i < n; ++i) {
         Eje s = {n + 1, i, 1};
         Eje t = {i, n + 2, 1};
-        grafo_auxiliar.push_back(s);
-        grafo_auxiliar.push_back(t);
+        grafo.push_back(s);
+        grafo.push_back(t);
     }
 
-    return bellmanFord(n, grafo_auxiliar, n + 2, m + 2*n);
+    return bellmanFord(n, grafo, n + 2, m + 2*n);
 }
 
 int minimo(std::vector<Eje> &vector, int m) {
@@ -79,7 +72,14 @@ int maximaReduccion(std::vector<Eje> &grafo, int n, int m) {
 
     while (inf + 1 < sup) {
         c = ((sup - inf) / 2) + inf;
-        if (bellmanFordMod(grafo, n, m, c)) {
+        std::vector<Eje> grafo_auxiliar;
+
+        for (int j = 0; j < m; ++j) {
+            Eje v = {grafo[j].origen, grafo[j].destino, grafo[j].peso - c};
+            grafo_auxiliar.push_back(v);
+        }
+        
+        if (bellmanFordMod(grafo_auxiliar, n, m)) {
             inf = c;
         } else {
             sup = c;

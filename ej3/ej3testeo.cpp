@@ -59,16 +59,27 @@ list<tuple<int, int> > acomodarAristas(list<tuple< int, int, int, int> > &lista 
     return res;
 }
 
-
+list<tuple<int, int> > aristasEntrantes(list<tuple< int, int, int, int> > &lista ){
+    list<tuple<int, int> > res;
+    tuple<int, int> posicion;
+    for(list< tuple<int, int, int, int> >::iterator it = lista.begin(); it != lista.end(); it++){
+        if(get<3>(*it) == true){
+        get<0>(posicion) = get<1>(*it); 
+        get<1>(posicion) = get<2>(*it);
+        res.push_back(posicion);
+        }
+    }
+    return res;
+}
 
 
 int main(){
      char buffer[300]={0};   // lo usaremos para guardar el nombre del fichero
     
     
-    sprintf(buffer, "ejercicio3_test1.csv"); // Ahora tenemos en buffer = "holaXX.txt"       
+    sprintf(buffer, "ejercicio3_tabla_no_conexo.csv"); // Ahora tenemos en buffer = "holaXX.txt"       
     vector<int> archivo;
-      
+ 
     ofstream salida;
     salida.open(buffer, ios::out);
     
@@ -77,7 +88,8 @@ int main(){
         cerr << "No se abrio bien el archivo" << endl;
         exit(1);
     }
-    salida << "Ciudades, tiempo1\n";
+    salida << "Ciudades, Cant de rutas iniciales, Cant de Rutas Finales, Rutas compartidas, Costo \n";
+
 
     while(true){
         vector< vector<int> > res;
@@ -86,7 +98,8 @@ int main(){
         cin >> cantCiudades;
         // n es la candidad de ciudades
         if(cantCiudades == -1){
-            //salida.close();
+            salida.close();
+            cout << "\n\n" << endl;
             break;
         }
         int cantRutas = (cantCiudades*(cantCiudades-1))/2;
@@ -96,6 +109,7 @@ int main(){
 
         list<tuple<int, int, int, int > > aristas = listaAristas(cantRutas);  //listaAristas en aux.h      
          //Me guardo la lista de las aristas en formato(c, c1, c2, e). 
+        list<tuple<int, int> > rutasexistentes = aristasEntrantes(aristas);//me guardas las aristas de G'(V',X')
 
         /*Uso un listaAristas en vez de la ListadeAdjacencia porque:
          si no deberia definir operator < de Dato, y porque necesito la lista de aristas
@@ -103,15 +117,30 @@ int main(){
         tener el Dato(y en su operator <, el costo) primero para ordenar bien las aristas.
         Debido a todos estos problemas list<tuple<int, int, int, int> >resulta mas comodo(puede ser vector
          en vez de lista) */ 
-        auto start = ya();     
+       // auto start = ya();     
         int peso = 0;
         int rutas = 0;            
-        list<tuple<int, int, int, int> > resultado = Kruskal(aristas,  peso,  rutas, cantCiudades);       
-        //salida << cantCiudades  << ";" <<chrono::duration_cast<chrono::nanoseconds>(end-start).count() << endl;
-        list<tuple<int, int> > aristassolucion = acomodarAristas(resultado);        
+        list<tuple<int, int, int, int> > resultado = Kruskal(aristas,  peso,  rutas, cantCiudades); 
+       
+        list<tuple<int, int> > aristassolucion = acomodarAristas(resultado); 
+        int tamaentrada = rutasexistentes.size();
+        int tamsalida = aristassolucion.size();
+
+        int compartidas = 0;
+        for(list< tuple<int, int> >::iterator it = aristassolucion.begin(); it != aristassolucion.end(); it++){
+            for(list< tuple<int, int> >::iterator it2 = rutasexistentes.begin(); it2 != rutasexistentes.end(); it2++){
+                if((*it) == (*it2)){
+                    compartidas++;
+                }
+            }
+        }
+
+
+        salida << cantCiudades  << "," << tamaentrada << "," << tamsalida << "," << compartidas <<","<< peso << endl;
         //el resultado de Kruskal es una list<tuple<c, c1, c2, e> >, acomodarAristas me deja list<tuple<c1,c2> >(aristas)
-        auto end = ya();
-        archivo.push_back(chrono::duration_cast<chrono::nanoseconds>(end-start).count());
+        //auto end = ya();
+        //salida << cantCiudades  << "," << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << endl;
+        //archivo.push_back(chrono::duration_cast<chrono::nanoseconds>(end-start).count());   
         cout<< peso <<" "<< rutas << " ";
         int i =1;
         for(list<tuple<int, int> >::iterator iter = aristassolucion.begin(); 
@@ -121,18 +150,20 @@ int main(){
         } 
         cout << endl;
     }
-    salida << "res = ";
-    salida << "[";
-    int i = 0;    
-    while(i < archivo.size()){
-        salida << archivo[i];
-        i++;
-        if(i < archivo.size()){
-            salida << ",";
-        }
-    }
-    salida << "]" <<endl; 
-    salida.close();  
+   // salida << "res = ";
+    //salida << "[";
+    //int i = 0;    
+    //while(i < archivo.size()){
+        //salida << archivo[i];
+      //  salida << archivo[i];
+       // salida << aristascorrectitud[i];
+       // i++;
+      //  if(i <  archivo.size()){
+      //      salida << ",";
+      //  }
+   // }
+    //salida << "]" <<endl; 
+    //salida.close();  
     //cout << "Fin de la ejecucion del algoritmo." << endl;
     return 0;
 }

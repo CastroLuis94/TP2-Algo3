@@ -60,7 +60,7 @@ list<tuple<int, int> > acomodarAristas(list<tuple< int, int, int, int> > &lista 
 int main(){    
     while(true){
         vector< vector<int> > res;
-        cout << "ingrese la cantidad de ciudades" <<endl;
+        //cout << "ingrese la cantidad de ciudades" <<endl;
         int cantCiudades;
         cin >> cantCiudades;
         // n es la candidad de ciudades
@@ -70,7 +70,7 @@ int main(){
         int cantRutas = (cantCiudades*(cantCiudades-1))/2;
         
 
-        cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
+        //cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
 
         list<tuple<int, int, int, int > > aristas = listaAristas(cantRutas);  //listaAristas en aux.h      
          //Me guardo la lista de las aristas en formato(c, c1, c2, e). 
@@ -97,7 +97,7 @@ int main(){
         cout << endl;
     }
   
-    cout << "Fin de la ejecucion del algoritmo." << endl;
+    //cout << "Fin de la ejecucion del algoritmo." << endl;
     return 0;
 }
 

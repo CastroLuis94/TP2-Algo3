@@ -63,32 +63,32 @@ void Dijkstradirijido(int origen, vector<vector <int> > &matriz, int N, int k, i
 int main(){
     while(true){
         vector< vector<int> > res;
-        cout << "ingrese la cantidad de ciudades" <<endl;
+        //cout << "ingrese la cantidad de ciudades" <<endl;
         int cantCiudades;
         cin >> cantCiudades;
         // n es la candidad de ciudades
         
-        cout << "ingrese la cantidad de rutas" <<endl;
+        //cout << "ingrese la cantidad de rutas" <<endl;
         int cantRutas;
         cin >> cantRutas;
         //m la cantidad de rutas
         if(cantCiudades == -1 and cantRutas == -1){
             break;
         }
-        cout << "¿Cual es la ciudad de origen?" <<endl;
+        //cout << "¿Cual es la ciudad de origen?" <<endl;
         int origen;
         cin >> origen;
         
-        cout << "¿Cual es la ciudad de destino?" <<endl;
+        //cout << "¿Cual es la ciudad de destino?" <<endl;
         int destino;
         cin >> destino;
         
-        cout << "¿Cual es la cantidad de rutas premium?" <<endl;
+        //cout << "¿Cual es la cantidad de rutas premium?" <<endl;
         int k;
         cin >> k;
         k = min(k,cantCiudades);
         //k siendo la maxima cantidad de rutas premium que puede haber 
-        cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
+        //cout << "Ingrese las " << cantRutas << " rutas en formato: numero_ciudad1 numero_ciudad2 es_premium(0 o 1) distancia" <<endl;
         vector<vector< int > > entrada = levantarEntrada(cantRutas);//cada vector<int> es de lon = 4, y es una arista.En formato (c1, c2, p, distancia)        
 
         Representador rep(cantCiudades,entrada);       
@@ -112,7 +112,7 @@ int main(){
         //cout << DijkstraLuis(origen,destino,cantCiudades,k,matriz) << endl;
 
     }  
-    cout << "Fin de la ejecucion del algoritmo." << endl;
+    //cout << "Fin de la ejecucion del algoritmo." << endl;
     return 0;
 }
 

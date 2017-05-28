@@ -18,13 +18,13 @@ def generador_grafo_random(num_ciudades, num_rutas):
         c1 = ciudades_origen[i]
         c2 = ciudades_destino[i].pop()
 
-        print(f'{c1} {c2} {random.randint(0,50)}')
+        print(f'{c1} {c2} {random.randint(0,100)}')
     for i in range(num_ciudades, num_rutas):
         c1 = random.choice(ciudades_origen)
         c2 = ciudades_destino[c1 - 1].pop()
         if len(ciudades_destino[c1 - 1]) == 0:
             ciudades_origen.remove(c1)
-        print(f'{c1} {c2} {random.randint(0,50)}')
+        print(f'{c1} {c2} {random.randint(0,100)}')
 
 
 # def generador_grafo_fuertemente_conexo(num_ciudades, num_rutas):

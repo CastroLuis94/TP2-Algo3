@@ -13,13 +13,13 @@ def generador_grafo_desconectado(num_ciudades):
         c1 = ciudades_origen.pop()
         if len(ciudades_origen) > 0:
             c2 = ciudades_origen.pop()
-            print(f'{c1} {c2} {random.randint(0,50)}')
-            print(f'{c2} {c1} {random.randint(0,50)}')
+            print(f'{c1} {c2} {random.randint(0,100)}')
+            print(f'{c2} {c1} {random.randint(0,100)}')
 
         else:
             ciudades_destino.remove(c1)
             c2 = random.choice(ciudades_destino)
-            print(f'{c1} {c2} {random.randint(0,50)}')
+            print(f'{c1} {c2} {random.randint(0,100)}')
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 #include <ostream>
 #include <vector>
 #include <stdio.h>
-#include "representador3.h"
+#include "representador.h"
 #include "DSU.h"
 
 
@@ -83,8 +83,8 @@ int main(){
          en vez de lista) */    
         int peso = 0;
         int rutas = 0;  
-        list<tuple<int, int, int, int> > resultado = Kruskal(aristas,  peso,  rutas, cantCiudades);        
-        cout << "peso"<<peso << endl;        
+        list<tuple<int, int, int, int> > resultado = Kruskal(aristas,  peso,  rutas, cantCiudades);       
+               
         list<tuple<int, int> > aristassolucion = acomodarAristas(resultado);
         //el resultado de Kruskal es una list<tuple<c, c1, c2, e> >, acomodarAristas me deja list<tuple<c1,c2> >(aristas)
         cout<< peso <<" "<< rutas << " ";

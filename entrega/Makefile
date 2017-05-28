@@ -20,7 +20,7 @@ ej2.o: ej2.cpp aux2.cpp aux2.h
 	g++ -std=c++11 -c ej2.cpp
 
 
-ej3.o: ej3.cpp representador3.h aux3.h
+ej3.o: ej3.cpp representador.h aux.h
 	g++ -std=c++11 -c ej3.cpp 	
 
 clean:

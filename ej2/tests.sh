@@ -1,19 +1,19 @@
 make ej2_testeo;make ej2;
 echo 'Inicia Test 1';
-python3 generador-ej2.py > temp_test1;./ej2_testeo < temp_test1; cat ejercicio2_test1.csv > ej2test1;
+python3 generador_ej2.py > temp_test1;./ej2_testeo < temp_test1; cat ejercicio2_test1.csv > ej2test1;
 echo 'Finaliza Test'
 echo 'Inicia Test 2';
-python3 generador-ej2-completo.py > temp_test2;./ej2_testeo < temp_test2; cat ejercicio2_test1.csv > ej2test2;
+python3 generador_ej2_completo.py > temp_test2;./ej2_testeo < temp_test2; cat ejercicio2_test1.csv > ej2test2;
 echo 'Finaliza Test'
 echo 'Inicia Test 3';
-python3 generador-ej2-desconectadas.py > temp_test3;./ej2_testeo < temp_test3; cat ejercicio2_test1.csv > ej2test3;
+python3 generador_ej2_desconectadas.py > temp_test3;./ej2_testeo < temp_test3; cat ejercicio2_test1.csv > ej2test3;
 echo 'Finaliza Test'
 echo 'Inicia Test 4';
-python3 generador-ej2-fuertemente-conexa.py > temp_test4;./ej2_testeo < temp_test4; cat ejercicio2_test1.csv > ej2test4;
+python3 generador_ej2_fuertemente_conexa.py > temp_test4;./ej2_testeo < temp_test4; cat ejercicio2_test1.csv > ej2test4;
 echo 'Finaliza Test'
 echo 'Inicia Test 5';
-python3 generador-ej2-random-fijo.py > temp_test5;./ej2_testeo < temp_test5; cat ejercicio2_test1.csv > ej2test5;
+python3 generador_ej2_random_fijo.py > temp_test5;./ej2_testeo < temp_test5; cat ejercicio2_test1.csv > ej2test5;
 echo 'Finaliza Test'
 echo 'Inicia Test 6';
-python3 generador-ej2-fc-fijo.py > temp_test6;./ej2_testeo < temp_test6; cat ejercicio2_test1.csv > ej2test6;
+python3 generador_ej2_fc_fijo.py > temp_test6;./ej2_testeo < temp_test6; cat ejercicio2_test1.csv > ej2test6;
 echo 'Finaliza Test'

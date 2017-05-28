@@ -31,8 +31,8 @@ df['desconectadas'] = [float(i[2]) for i in datos_desconectadas]
 df['fuertemente_conexa'] = [float(i[2]) for i in datos_fuertemente_conexa]
 
 plt.clf()
-grafico = df.groupby('cantidad de nodos').mean().plot(title="Ejercicio 2")
-grafico.set_ylabel("Tiempo en ms")
+grafico = df.groupby('cantidad de nodos').mean().plot(title="Ejercicio 2",logy=True)
+grafico.set_ylabel("Tiempo en nanosegundos")
 # grafico_backtracking_poda = df_backtracking_poda.groupby('cantidad de elementos').mean().plot(title="Implementación de Backtracking con poda")
 # grafico_backtracking_poda.set_ylabel("Tiempo en ms")
 # grafico_dinamico = df_dinamico.groupby('cantidad de elementos').mean().plot(title='Implementación de programacion dinamica')

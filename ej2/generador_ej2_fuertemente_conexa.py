@@ -35,7 +35,7 @@ def generador_grafo_fc(n, m):
 
 
 if __name__ == "__main__":
-    for i in range(2, 500+1):
-        for k in range(100):
+    for i in range(2, 400):
+        for k in range(50):
             generador_grafo_fc(i, random.randint(i, i * (i - 1)))
     print(-1, -1)

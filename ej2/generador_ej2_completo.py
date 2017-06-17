@@ -42,7 +42,7 @@ def generador_grafo_random(num_ciudades, num_rutas):
 
 
 if __name__ == "__main__":
-    for i in range(2, 500 + 1):
+    for i in range(2, 400):
         # generador_grafo_random(i, random.randint(i, i*(i-1)))
         generador_grafo_random(i, i * (i - 1))
     print(-1, -1)
